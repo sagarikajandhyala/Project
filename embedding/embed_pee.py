@@ -1,5 +1,8 @@
-# embed_pee.py
+# embedding/embed_pee.py
 from models.predictor import predict_pixel
+
+MAX_ERR = 1          # controls reversibility vs capacity
+HEADER_BITS = 32     # payload length header
 
 def embed_payload(image, bits):
     stego = image.copy()
@@ -8,25 +11,33 @@ def embed_payload(image, bits):
 
     for i in range(8, h - 8):
         for j in range(8, w - 8):
+
             if idx >= len(bits):
                 return stego, idx
 
             pred = predict_pixel(image, i, j)
             err = image[i, j] - pred
 
-            # PEE embedding
-            if err == 0:
-                stego[i, j] = pred + bits[idx]
-                idx += 1
-            elif err == -1:
-                stego[i, j] = pred - 1 - bits[idx]
-                idx += 1
-            else:
-                # histogram shifting
-                if err > 0:
-                    stego[i, j] = image[i, j] + 1
-                else:
-                    stego[i, j] = image[i, j] - 1
+            # 🔐 HEADER MUST BE EMBEDDED ONLY IN PERFECTLY SAFE PIXELS
+            if idx < HEADER_BITS and err != 0:
+                continue
+
+            # 🔒 PAYLOAD SAFETY CONSTRAINT
+            if abs(err) > MAX_ERR:
+                continue
+
+            new_val = pred + (2 * err + bits[idx])
+
+            # 🚨 OVERFLOW CHECK
+            if new_val < 0 or new_val > 255:
+                continue
+
+            stego[i, j] = new_val
+            idx += 1
 
     return stego, idx
+
+
+
+
 

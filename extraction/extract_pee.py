@@ -1,7 +1,7 @@
 # extraction/extract_pee.py
 from models.predictor import predict_pixel
 
-def extract_payload(stego, num_bits):
+def extract_payload(stego, original, num_bits):
     recovered = stego.copy()
     bits = []
     idx = 0
@@ -13,15 +13,18 @@ def extract_payload(stego, num_bits):
             if idx >= num_bits:
                 return recovered, bits
 
-            pred = predict_pixel(recovered, i, j)
+            # 🔒 IMPORTANT: predict ONLY from ORIGINAL image
+            pred = predict_pixel(original, i, j)
+
             new_err = stego[i, j] - pred
-
             bits.append(new_err & 1)
-            recovered[i, j] = pred + (new_err >> 1)
 
+            recovered[i, j] = pred + (new_err >> 1)
             idx += 1
 
     return recovered, bits
+
+
 
 
 

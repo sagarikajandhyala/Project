@@ -16,7 +16,7 @@ from evaluation.metrics import psnr, ssim
 # ============================
 DATASET_DIR = "dataset/raw"     # <-- YOUR DATASET
 MODEL_PATH = "models/unet.pth"
-MAX_IMAGES = 50                # limit for CPU runtime
+MAX_IMAGES = 5                # limit for CPU runtime
 
 # ============================
 # LOAD TRAINED U-NET
@@ -91,9 +91,11 @@ with torch.no_grad():  # IMPORTANT for speed + correctness
         # EXTRACTION (CNN-BASED)
         # ----------------------------
         recovered_img, extracted_bits = extract_payload(
-    stego,          # original image
+    stego,
+    image,          # ORIGINAL IMAGE
     embedded_bits
 )
+
 
 
         # Decode header

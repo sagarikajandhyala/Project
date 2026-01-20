@@ -1,7 +1,7 @@
 # embedding/embed_pee.py
 from models.predictor import predict_pixel
 
-MAX_ERR = 1          # controls reversibility vs capacity
+MAX_ERR = 0          # controls reversibility vs capacity
 HEADER_BITS = 32     # payload length header
 
 def embed_payload(image, bits):

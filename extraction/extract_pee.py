@@ -1,5 +1,5 @@
 # extraction/extract_pee.py
-from models.predictor import predict_pixel
+from predictor import predict_pixel
 
 def extract_payload(stego, original, num_bits):
     recovered = stego.copy()

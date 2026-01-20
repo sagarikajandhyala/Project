@@ -1,7 +1,7 @@
 # training/train_unet.py
 import torch
 from models.unet import UNet
-from training.dataloader import get_loader
+from dataloader import get_loader
 import torch.nn.functional as F
 from tqdm import tqdm
 from config import EPOCHS

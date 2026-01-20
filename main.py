@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 from models.unet import UNet
-from models.predictor import predict_pixel
+from predictor import predict_pixel
 from embedding.embed_pee import embed_payload
 from extraction.extract_pee import extract_payload
 from payload.utils import text_to_bits, bits_to_text
